@@ -1,0 +1,13 @@
+{
+    "tailwindCSS.emmetCompletions": true,
+    "javascript.inlayHints.propertyDeclarationTypes.enabled": false,
+    "tailwindCSS.includeLanguages": {
+        "html": "html",
+        "javascript": "javascript",
+        "css": "css",
+        "typescript": "typescript"
+    },
+    "editor.quickSuggestions": {
+        "strings": true
+    }
+}

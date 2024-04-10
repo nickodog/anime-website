@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.open{
+    display: block;
+    transition: display 0.35s ease-out;
+}
+
+.close {
+    display: none;
+    transition: display 0.35s ease-out;
+  }
+
+.columns {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-gap: 2rem;
+}
