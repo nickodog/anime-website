@@ -23,10 +23,10 @@ export default async function AnimeInfo({ params }: {
             newArray.unshift(array[i]); // Push the current element from the original array to the beginning of the new array
         
             // If the current index plus one is divisible by 3 (i.e., every third element)
-            if ((array.length - i) % 3 === 0) {
-                newArray.unshift(".");
+            if (((array.length - i) % 3 === 0) && ((array.length - i) < array.length)) {
+                    newArray.unshift(".");
+                }
             }
-        }
 
         newArray.map(char => (
             newString += char
