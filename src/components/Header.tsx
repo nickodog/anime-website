@@ -4,6 +4,7 @@ import React from "react";
 import Link from "next/link";
 import "./styles.css";
 import { useState } from "react";
+import { SearchForm } from "./SearchForm";
 
 export const Header:React.FC = () => {
     const [ searchInput, setSearchInput ] = useState<boolean>(false);
@@ -21,18 +22,18 @@ export const Header:React.FC = () => {
         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" /></svg>
       </div>
       <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
-        <li><a>Home</a></li>
-        <li><a>About</a></li>
-        <li><a>Something</a></li>
+        <li><Link href="/">Home</Link></li>
+        <li><Link href="/about">About</Link></li>
+        <li><Link href="/contact">Contact</Link></li>
       </ul>
     </div>
-    <a className="btn btn-ghost text-xl">AnimeList</a>
+    <Link href="/" className="btn btn-ghost text-xl">AnimeList</Link>
   </div>
   <div className="navbar-center hidden lg:flex">
     <ul className="menu menu-horizontal px-1">
       <li><Link href="/">Home</Link></li>
       <li><Link href="/about">About</Link></li>
-      <li><Link href="/">Contact</Link></li>
+      <li><Link href="/contact">Contact</Link></li>
     </ul>
   </div>
   <div className="navbar-end">
@@ -41,7 +42,7 @@ export const Header:React.FC = () => {
     </button>
   </div>
   <aside className={`right-16 absolute ${searchInput ? "open" : "close"}`}>
-    <input className="rounded" placeholder="Search..." type="text"></input>
+    <SearchForm/>
   </aside>
 </div>
     )

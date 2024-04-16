@@ -1,30 +1,60 @@
+/* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
-import { Key, ReactElement, JSXElementConstructor, ReactNode, ReactPortal, AwaitedReactNode } from "react";
+import { Key } from "react";
+import React from "react";
 
-const getData = async () =>  {
-    const data = await fetch(`https://api.jikan.moe/v4/top/anime?filter=airing`)
-    return data.json()
+interface Anime {
+    popularity: number | undefined;
+    mal_id: Key | undefined;
+    images: { jpg: { large_image_url: string } };
+    title: string | undefined;
+    episodes: number | undefined;
+    status: string | undefined;
+    score: number | undefined;
+    rank: number | undefined;
 }
-  
-export default async function TopAnime() {
-    const data = await getData();
+
+const getData = async (): Promise<{ data: Anime[] }> => {
+    const data = await fetch(`https://api.jikan.moe/v4/top/anime?filter=airing`);
+    return data.json();
+};
+
+export function unknown(param: undefined | string | number | null, rest: string): string {
+    if (param === null) {
+        return "Unknown";
+    } else {
+        return param + rest;
+    }
+}
+
+export function ranking(popularity: number | null | undefined){
+    if (popularity !== null) {
+    switch (popularity) {
+        case 1: return popularity + "st Most Popular"
+        case 2: return popularity + "nd Most Popular"
+        case 3: return popularity + "rd Most Popular"
+        default: return popularity + "th Most Popular"
+    }}else return "Unknown"
+}
+
+export default async function TopAnime(): Promise<React.JSX.Element> {
+    const { data } = await getData();
     return (
-        <div className="columns my-10">
-            {data.data.map((anime: { mal_id: Key | null | undefined; images: { jpg: { large_image_url: string; }; }; title: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<AwaitedReactNode> | null | undefined; episodes: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<AwaitedReactNode> | null | undefined; status: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<AwaitedReactNode> | null | undefined; score: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<AwaitedReactNode> | null | undefined; rank: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<AwaitedReactNode> | null | undefined; }) => (
-                <Link key={anime.mal_id} href={`/anime/${anime.mal_id}`} className="w-full h-40 border-2 mx-7 rounded border-black flex">
-                    <div className="w-max">
-                        <img className="rounded border-0 h-full max-w-48" src={anime.images.jpg.large_image_url} alt="penis"></img>
-                    </div>
-                    <div className="w-fit ml-2 mt-1 mr-2">
-                        <p>{anime.title}</p>
-                        <p>{anime.episodes} episodes</p>
-                        <p>{anime.status}</p>
-                        <p>{anime.score}/10</p>
-                        <p>{anime.rank}th most Popular</p>
-                    </div>
+        <div className="columns mt-10 pb-10 ml-14">
+            {data.map((anime) => (
+                <Link key={anime.mal_id} href={`/anime/${anime.mal_id}`} className="max-w-96 border-2 rounded border-black flex mb-10">
+                        <div className="w-max">
+                            <img className="rounded border-0 h-full max-w-32" src={anime.images.jpg.large_image_url} alt="anime poster" />
+                        </div>
+                        <div className="ml-2 mt-1 mr-2">
+                            <p className="text-6x1">{anime.title}</p>
+                            <p>{unknown(anime.episodes, " episodes")}</p>
+                            <p>{anime.status}</p>
+                            <p>{anime.score}/10</p>
+                            <p>{ranking(anime.popularity)}</p>
+                        </div>
                 </Link>
             ))}
         </div>
     );
-}
-
+};
