@@ -2,7 +2,6 @@
 import React from "react"
 import { unknown } from "@/components/TopAnime";
 import CharacterList from "@/components/AnimeCharacters";
-import { FaRegArrowAltCircleRight } from "react-icons/fa";
 
 
 export function formattingNumbers(num: number) {
@@ -46,8 +45,8 @@ export default async function AnimeInfo({ params }: {
                     {data.data.title_japanese}
                 </h1>
                 <br></br>
-                <div className="flex w-full md:w-fit">
-                    <div className="w-full md:w-auto">
+                <div className="flex w-full md:w-fit items-center">
+                    <div className="w-full md:w-auto mr-6">
                         <div className="border-x-2 border-t-2 text-2xl text-center w-full md:w-auto rounded-t border-[#A7ADBB] text-[#A7ADBB]">
                             <p className="px-3">SCORE</p>
                         </div>
@@ -55,7 +54,7 @@ export default async function AnimeInfo({ params }: {
                             <p>{unknown(data.data.score, "")}</p>
                         </div>
                     </div>
-                    <div className="w-full md:w-auto mx-8 mt-2 md:mt-0">
+                    <div className="w-full md:w-auto mr-6">
                         <div className="border-x-2 border-t-2 text-2xl text-center w-full md:w-auto rounded-t border-[#A7ADBB] text-[#A7ADBB]">
                             <p className="px-3">MEMBERS</p>
                         </div>
@@ -74,20 +73,16 @@ export default async function AnimeInfo({ params }: {
                 </div>
                 <br />
                 <div>
-
-                </div>
-                <br />
-                <div>
-                        <h1 className="text-3xl">Characters</h1>
-                        <CharacterList animeId={data.data.mal_id} limit={5}/>
+                    <h1 className="text-3xl">Characters</h1>
+                   <CharacterList animeId={data.data.mal_id} limit={4}/>
                 </div>
                 <br />
                 <div>
                     <h1 className="text-2xl">PV/Trailer</h1>
                     {data.data.trailer.embed_url === null ? (
-                        <p>No trailer.</p>
+                        <p className="mb-10">No trailer.</p>
                     ): (
-                        <iframe src={data.data.trailer.embed_url} className="rounded" title="Trailer"/>
+                        <iframe src={data.data.trailer.embed_url} className="rounded mb-10" title="Trailer"/>
                     )}
                 </div>
             </div>
