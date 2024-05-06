@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 import React from "react";
 
-export default function About(){
+const About = () => {
     return(
         <div className="text-center h-screen text-[#A7ADBB]">
             <h1>Welcome to the Anime Listing website!</h1>
@@ -9,3 +9,5 @@ export default function About(){
         </div>
     )
 }
+
+export default About

@@ -1,11 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
-import { Key } from "react";
 import React from "react";
 
 interface Anime {
     popularity: number | undefined;
-    mal_id: Key | undefined;
+    mal_id: number | undefined; // Changed Key to numhttps://github.com/nickodogber since mal_id is a number
     images: { jpg: { large_image_url: string } };
     title: string | undefined;
     episodes: number | undefined;
@@ -21,7 +20,7 @@ const getData = async (): Promise<{ data: Anime[] }> => {
 
 export function unknown(param: undefined | string | number | null, rest: string): string {
     if (param === null) {
-        return "Unknown";
+        return "Unknown" + rest;
     } else {
         return param + rest;
     }
@@ -40,7 +39,7 @@ export function ranking(popularity: number | null | undefined){
 export default async function TopAnime(): Promise<React.JSX.Element> {
     const { data } = await getData();
     return (
-        <div className="columns mt-10 pb-10 ml-14">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-10 pb-10 ml-14">
             {data.map((anime) => (
                 <Link key={anime.mal_id} href={`/anime/${anime.mal_id}`} className="max-w-96 border-2 rounded border-black flex mb-10">
                         <div className="w-max">

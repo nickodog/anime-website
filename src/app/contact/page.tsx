@@ -2,9 +2,9 @@
 import React from "react";
 import { FaSquareGithub } from "react-icons/fa6";
 
-export default function Contact(){
+const Contact = () => {
     return(
-        <div className="text-center h-screen justify-center w-screen text-[#A7ADBB]">
+        <div className="text-center h-screen justify-center text-[#A7ADBB]">
             <h1>Thank you for visiting!</h1>
             <h2>Here you'll find all the ways to contact me about bugs or suggestions that you feel would make the website better!</h2>
             <div className="flex justify-center mr-80">
@@ -14,5 +14,7 @@ export default function Contact(){
             </div>
             
         </div>
-    )
-}
+    );
+};
+
+export default Contact;

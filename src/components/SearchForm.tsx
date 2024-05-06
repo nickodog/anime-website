@@ -12,7 +12,7 @@ export const SearchForm = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <input type="text" id="content" value={content} onChange={(e) => setContent(e.target.value)} /><br />
+      <input type="text" className='rounded border-[2px] border-black' id="content" value={content} onChange={(e) => setContent(e.target.value)} /><br />
     </form>
   );
 };
