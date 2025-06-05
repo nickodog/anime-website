@@ -4,7 +4,7 @@ import React from "react";
 
 interface Anime {
     popularity: number | undefined;
-    mal_id: number | undefined; // Changed Key to numhttps://github.com/nickodogber since mal_id is a number
+    mal_id: number | undefined;
     images: { jpg: { large_image_url: string } };
     title: string | undefined;
     episodes: number | undefined;

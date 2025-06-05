@@ -1,18 +1,17 @@
 /* eslint-disable @next/next/no-img-element */
+'use server'
 import React from "react"
 import { formattingNumbers } from "../../page";
 import { ShowMore } from "@/components/ShowMore";
 import Link from "next/link";
 import { FaRegArrowAltCircleRight } from "react-icons/fa";
+import { getData } from "@/components/getData";
+import BoxDisplay from "@/components/BoxDisplay";
+
 
 export default async function AnimeInfo({ params }: {
     params: { id: number; charId: number;}
 }) {
-    const getData = async (url: string) =>  {
-        const data = await fetch(url)
-        return data.json()
-    }
-    
     const char = await getData(`https://api.jikan.moe/v4/characters/${params.charId}/full`);
 
     function ArrayPrint(){
@@ -55,13 +54,8 @@ export default async function AnimeInfo({ params }: {
                             Aka: {ArrayPrint()}
                         </h1>
                     </div>
-                    <div className="w-fit md:w-auto mx-8 mt-2 md:mt-0">
-                        <div className="border-x-2 border-t-2 text-2xl text-center w-full md:w-auto rounded-t border-[#A7ADBB] text-[#A7ADBB]">
-                            <p className="px-3">FAVORITES</p>
-                        </div>
-                        <div className="text-3xl border-x-2 border-b-2 border-[#A7ADBB] text-center bg-[#A7ADBB] text-black rounded-b">
-                            <p>{formattingNumbers(char.data.favorites)}</p>
-                        </div>
+                    <div className="ml-4">
+                    <BoxDisplay label={`FAVORITES`} value={formattingNumbers(char.data.favorites)}/>
                     </div>
                 </div>
                 <br />

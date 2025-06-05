@@ -2,7 +2,9 @@
 import React from "react"
 import { unknown } from "@/components/TopAnime";
 import CharacterList from "@/components/AnimeCharacters";
-
+import { getData } from "@/components/getData";
+import NumberDisplay from "@/components/BoxDisplay";
+import BoxDisplay from "@/components/BoxDisplay";
 
 export function formattingNumbers(num: number) {
     const str = `${num}`
@@ -26,10 +28,6 @@ export function formattingNumbers(num: number) {
 export default async function AnimeInfo({ params }: {
     params: { id: number;}
 }) {
-    const getData = async (url: string) => {
-        const data = await fetch(url)
-        return data.json()
-    }
     const data = await getData(`https://api.jikan.moe/v4/anime/${params.id}/full`);
 
     return (
@@ -46,35 +44,14 @@ export default async function AnimeInfo({ params }: {
                 </h1>
                 <br></br>
                 <div className="flex w-full md:w-fit items-center">
-                    <div className="w-full md:w-auto mr-6">
-                        <div className="border-x-2 border-t-2 text-2xl text-center w-full md:w-auto rounded-t border-[#A7ADBB] text-[#A7ADBB]">
-                            <p className="px-3">SCORE</p>
-                        </div>
-                        <div className="text-3xl border-x-2 border-b-2 border-[#A7ADBB] text-center bg-[#A7ADBB] text-black rounded-b">
-                            <p>{unknown(data.data.score, "")}</p>
-                        </div>
-                    </div>
-                    <div className="w-full md:w-auto mr-6">
-                        <div className="border-x-2 border-t-2 text-2xl text-center w-full md:w-auto rounded-t border-[#A7ADBB] text-[#A7ADBB]">
-                            <p className="px-3">MEMBERS</p>
-                        </div>
-                        <div className="text-3xl border-x-2 border-b-2 border-[#A7ADBB] text-center bg-[#A7ADBB] text-black rounded-b">
-                            <p>{formattingNumbers(data.data.members)}</p>
-                        </div>
-                    </div>
-                    <div className="w-full md:w-auto">
-                        <div className="border-x-2 border-t-2 text-2xl text-center w-full md:w-auto rounded-t border-[#A7ADBB] text-[#A7ADBB]">
-                            <p className="px-3">EPISODES</p>
-                        </div>
-                        <div className="text-3xl border-x-2 border-b-2 border-[#A7ADBB] text-center bg-[#A7ADBB] text-black rounded-b">
-                            <p>{unknown(data.data.episodes, "")}</p>
-                        </div>
-                    </div>
+                    <BoxDisplay label={`SCORE`} value={data.data.score}/>
+                    <BoxDisplay label={`MEMBERS`} value={formattingNumbers(data.data.members)}/>
+                    <BoxDisplay label={`EPISODES`} value={unknown(data.data.episodes, ``)}/>
                 </div>
                 <br />
                 <div>
                     <h1 className="text-3xl">Characters</h1>
-                   <CharacterList animeId={data.data.mal_id} limit={4}/>
+                    <CharacterList animeId={data.data.mal_id} limit={4}/>
                 </div>
                 <br />
                 <div>

@@ -1,14 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
 import React from "react"
 import Link from "next/link";
+import { getData } from "@/components/getData";
 
 export default async function AnimeInfo({ params }: {
     params: { id: number, charId: number;}
 }) {
-    const getData = async (url: string) => {
-        const data = await fetch(url)
-        return data.json()
-    }
     const char = await getData(`https://api.jikan.moe/v4/characters/${params.charId}/full`);
 
     return (

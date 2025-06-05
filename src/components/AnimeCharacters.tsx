@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 'use client'
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
@@ -28,7 +29,7 @@ const CharacterList = ({ animeId, limit = 0 }: { animeId: number, limit: number 
         };
 
         fetchData();
-    }, [animeId]);
+    });
 
     return (
         <>

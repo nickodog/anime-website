@@ -17,7 +17,7 @@ export const ShowMore = ({ text }: {text: string[]}) => {
                         <p key={index}>{paragraph}</p>
                     ))}
                     {text.length > 10 && (
-                        <button className='px-2 py-1 mt-2 rounded border border-[1px] float-right md:float-none' onClick={handleClick}>Show Less</button>
+                        <button className='px-2 py-1 mt-2 rounded border-[1px] float-right md:float-none' onClick={handleClick}>Show Less</button>
                     )}
                 </>
             ) : (
@@ -27,7 +27,7 @@ export const ShowMore = ({ text }: {text: string[]}) => {
                     ))}
                     {text.length > 10 && (
                         <div className="text-right mt-2 md:text-left md:mt-0">
-                            <button className='px-2 py-1 rounded border border-[1px]' onClick={handleClick}>Show More</button>
+                            <button className='px-2 py-1 rounded border-[1px]' onClick={handleClick}>Show More</button>
                         </div>
                     )}
                 </>
