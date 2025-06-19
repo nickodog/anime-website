@@ -7,7 +7,11 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./anime-websitenextjs
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -22,3 +26,76 @@ jobs:
 
       - name: Build the project
         run: npm run build
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init
+        run: terraform init
+        working-directory: ./terraform-project
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
+        working-directory: ./terraform-project
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: sa-east-1
+
+      - name: Save EC2 Public IP
+        run: terraform output -raw instance_public_ip > ec2_ip.txt
+        working-directory: ./terraform-project
+
+      - name: Upload EC2 IP Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ec2_ip
+          path: ./terraform-project/ec2_ip.txt
+
+      - name: Upload Private Key Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ssh_key
+          path: ./terraform-project/TerraFormServer.pem
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Download EC2 IP
+        uses: actions/download-artifact@v3
+        with:
+          name: ec2_ip
+
+      - name: Download SSH Key
+        uses: actions/download-artifact@v3
+        with:
+          name: ssh_key
+
+      - name: Set SSH Key permissions
+        run: chmod 600 TerraFormServer.pem
+
+      - name: Read EC2 IP
+        id: ec2ip
+        run: echo "EC2_IP=$(cat ec2_ip.txt)" >> $GITHUB_ENV
+
+      - name: Deploy Project via SSH
+        run: |
+          echo "Deploying to $EC2_IP"
+          
+          # Copiar projeto via SCP
+          scp -i TerraFormServer.pem -o StrictHostKeyChecking=no -r ./anime-websitenextjs ubuntu@$EC2_IP:/home/ubuntu/anime-websitenextjs
+          
+          # Rodar comandos remotos via SSH
+          ssh -i TerraFormServer.pem -o StrictHostKeyChecking=no ubuntu@$EC2_IP << EOF
+            sudo apt update
+            sudo apt install -y nodejs npm
+            cd ~/anime-websitenextjs
+            npm install
+            npm run build
+            nohup npm start &
+          EOF
