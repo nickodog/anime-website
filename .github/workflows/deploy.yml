@@ -71,12 +71,6 @@ jobs:
         with:
           name: project_build
 
-      - name: Listar
-        run: ls -la
-
-      - name: Check inside project_build
-        run: ls -la ./project_build
-
       - name: Checkout code
         uses: actions/checkout@v2
 
@@ -102,7 +96,7 @@ jobs:
           echo "Deploying to $EC2_IP"
           
           # Copiar projeto via SCP
-          scp -i TerraFormServer.pem -o StrictHostKeyChecking=no -r ./project_build/* ubuntu@$EC2_IP:/home/ubuntu/anime-website
+          scp -i TerraFormServer.pem -o StrictHostKeyChecking=no -r ./* ubuntu@$EC2_IP:/home/ubuntu/anime-website
           
           # Rodar comandos remotos via SSH
           ssh -i TerraFormServer.pem -o StrictHostKeyChecking=no ubuntu@$EC2_IP << EOF
