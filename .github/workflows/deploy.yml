@@ -54,11 +54,23 @@ jobs:
           name: ssh_key
           path: ./terraform-project/TerraFormServer.pem
 
+      - name: Upload project artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: project_build
+          path: ./anime-websitenextjs
+
+
   deploy:
     needs: build
     runs-on: ubuntu-latest
 
     steps:
+      - name: Download project artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: project_build
+
       - name: Checkout code
         uses: actions/checkout@v2
 
@@ -84,7 +96,7 @@ jobs:
           echo "Deploying to $EC2_IP"
           
           # Copiar projeto via SCP
-          scp -i TerraFormServer.pem -o StrictHostKeyChecking=no -r ./anime-websitenextjs ubuntu@$EC2_IP:/home/ubuntu/anime-websitenextjs
+          scp -i TerraFormServer.pem -o StrictHostKeyChecking=no -r ./project_build ubuntu@$EC2_IP:/home/ubuntu/anime-websitenextjs
           
           # Rodar comandos remotos via SSH
           ssh -i TerraFormServer.pem -o StrictHostKeyChecking=no ubuntu@$EC2_IP << EOF
