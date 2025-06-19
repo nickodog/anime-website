@@ -102,7 +102,7 @@ jobs:
           ssh -i TerraFormServer.pem -o StrictHostKeyChecking=no ubuntu@$EC2_IP << EOF
             sudo apt update
             sudo apt install -y nodejs npm
-            cd ~/anime-websitenextjs
+            cd ~/anime-website
             npm install
             npm run build
             nohup npm start &
