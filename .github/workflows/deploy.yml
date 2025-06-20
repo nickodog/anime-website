@@ -54,23 +54,11 @@ jobs:
           name: ssh_key
           path: ./terraform-project/TerraFormServer.pem
 
-      - name: Upload project artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: project_build
-          path: .
-
-
   deploy:
     needs: build
     runs-on: ubuntu-latest
 
     steps:
-      - name: Download project artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: project_build
-
       - name: Checkout code
         uses: actions/checkout@v2
 
@@ -95,15 +83,24 @@ jobs:
         run: |
           echo "Deploying to $EC2_IP"
           
-          # Copiar projeto via SCP
+          # Copiar código-fonte via SCP
           scp -i TerraFormServer.pem -o StrictHostKeyChecking=no -r ./* ubuntu@$EC2_IP:/home/ubuntu/anime-website
           
           # Rodar comandos remotos via SSH
           ssh -i TerraFormServer.pem -o StrictHostKeyChecking=no ubuntu@$EC2_IP << EOF
+            set -e
             sudo apt update
-            sudo apt install -y nodejs npm
+            sudo apt install -y docker.io
+
             cd ~/anime-website
-            npm install
-            npm run build
-            nohup npm start &
+
+            # Buildar a imagem Docker
+            docker build -t anime-website .
+
+            # Parar e remover container antigo, se existir
+            docker stop anime-app || true
+            docker rm anime-app || true
+
+            # Rodar novo container
+            docker run -d --restart unless-stopped -p 3000:3000 --name anime-app anime-website
           EOF
