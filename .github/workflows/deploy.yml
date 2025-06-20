@@ -95,12 +95,12 @@ jobs:
             cd ~/anime-website
 
             # Buildar a imagem Docker
-            docker build -t anime-website .
+            sudo docker build -t anime-website .
 
             # Parar e remover container antigo, se existir
-            docker stop anime-app || true
-            docker rm anime-app || true
+            sudo docker stop anime-app || true
+            sudo docker rm anime-app || true
 
             # Rodar novo container
-            docker run -d --restart unless-stopped -p 3000:3000 --name anime-app anime-website
+            sudo docker run -d --restart unless-stopped -p 3000:3000 --name anime-app anime-website
           EOF
